@@ -1,0 +1,777 @@
+<div class="min-h-screen bg-slate-50 text-slate-900">
+
+  <!-- Success Toast -->
+  @if (successMessage) {
+    <div class="fixed right-4 top-4 z-50 sm:right-6 sm:top-6">
+      <div
+        class="flex max-w-sm items-center gap-4 rounded-2xl border border-emerald-200 bg-white px-5 py-4 shadow-xl shadow-slate-200/60"
+      >
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+        >
+          ✓
+        </div>
+
+        <div>
+          <p class="font-semibold text-slate-900">
+            Success
+          </p>
+
+          <p class="mt-1 text-sm text-slate-500">
+            {{ successMessage }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
+    <!-- ==================== HEADER ==================== -->
+    <div class="mb-8">
+
+      <div class="flex items-start gap-4">
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-6 w-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </div>
+
+        <div>
+          <p class="text-sm font-medium text-emerald-600">
+            Quality Department
+          </p>
+
+          <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Quality Response
+          </h1>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Review testing memos and submit quality responses.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================== LOADING ==================== -->
+    @if (loading) {
+
+      <div
+        class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm"
+      >
+
+        <div
+          class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"
+        ></div>
+
+        <p class="mt-4 text-sm text-slate-500">
+          Loading testing memos...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ==================== ERROR ==================== -->
+    @if (!loading && errorMessage) {
+
+      <div
+        class="rounded-2xl border border-red-200 bg-red-50 p-5"
+      >
+
+        <div class="flex items-start gap-3">
+
+          <div
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600"
+          >
+            !
+          </div>
+
+          <div>
+            <p class="font-medium text-red-700">
+              Something went wrong
+            </p>
+
+            <p class="mt-1 text-sm text-red-600">
+              {{ errorMessage }}
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- ==================== MEMO LIST ==================== -->
+    @if (!loading && !errorMessage && !selectedMemo) {
+
+      <!-- No Memos -->
+      @if (memos.length === 0) {
+
+        <div
+          class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm"
+        >
+
+          <div
+            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.7"
+              stroke="currentColor"
+              class="h-7 w-7"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2Z"
+              />
+            </svg>
+          </div>
+
+          <h2 class="mt-5 text-lg font-semibold text-slate-900">
+            No Testing Memos
+          </h2>
+
+          <p class="mt-2 text-sm text-slate-500">
+            There are no testing memos waiting for a quality response.
+          </p>
+
+        </div>
+
+      }
+
+
+      <!-- Memos -->
+      @if (memos.length > 0) {
+
+        <div class="space-y-4">
+
+          @for (memo of memos; track memo.id) {
+
+            <div
+              (click)="openMemo(memo)"
+              class="group cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md sm:p-6"
+            >
+
+              <!-- Memo Header -->
+              <div
+                class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+
+                <div class="min-w-0">
+
+                  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    Work Order
+                  </p>
+
+                  <h2
+                    class="mt-1 truncate text-xl font-bold text-slate-900"
+                  >
+                    {{ memo.groups?.[0]?.workOrder || 'No Work Order' }}
+                  </h2>
+
+                </div>
+
+                <div class="flex items-center justify-between gap-3 sm:justify-end">
+
+                  <span
+                    class="w-fit rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700"
+                  >
+                    Pending Response
+                  </span>
+
+                  <!-- Delete -->
+                  <button
+                    type="button"
+                    (click)="openDeleteModal(memo.id); $event.stopPropagation()"
+                    title="Delete memo"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.8"
+                      stroke="currentColor"
+                      class="h-4 w-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
+                      />
+                    </svg>
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- Memo Summary -->
+              <div
+                class="mt-5 grid gap-4 border-t border-slate-100 pt-5 sm:grid-cols-2 lg:grid-cols-4"
+              >
+
+                <!-- Drum -->
+                <div>
+                  <p class="text-xs font-medium text-slate-400">
+                    Drum No
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-700">
+                    {{ memo.groups?.[0]?.drumNo || '-' }}
+                  </p>
+                </div>
+
+
+                <!-- Client -->
+                <div>
+                  <p class="text-xs font-medium text-slate-400">
+                    Client
+                  </p>
+
+                  <p class="mt-1 truncate text-sm font-medium text-slate-700">
+                    {{ memo.groups?.[0]?.clientName || '-' }}
+                  </p>
+                </div>
+
+
+                <!-- Cable -->
+                <div>
+                  <p class="text-xs font-medium text-slate-400">
+                    Cable Construction
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-700">
+                    {{ memo.groups?.[0]?.cableConstruction || '-' }}
+                  </p>
+                </div>
+
+
+                <!-- Person -->
+                <div>
+                  <p class="text-xs font-medium text-slate-400">
+                    Person in Charge
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-700">
+                    {{ memo.personInCharge || '-' }}
+                  </p>
+                </div>
+
+              </div>
+
+
+              <!-- Groups Count -->
+              <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+
+                <div>
+                  <p class="text-xs font-medium text-slate-400">
+                    Testing Groups
+                  </p>
+
+                  <p class="mt-1 text-sm font-semibold text-slate-700">
+                    {{ memo.groups?.length || 0 }}
+                    {{ (memo.groups?.length || 0) === 1 ? 'Group' : 'Groups' }}
+                  </p>
+                </div>
+
+                <span
+                  class="text-sm font-semibold text-blue-600 transition group-hover:translate-x-1"
+                >
+                  Review →
+                </span>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+
+    <!-- ==================== MEMO DETAILS ==================== -->
+    @if (!loading && !errorMessage && selectedMemo) {
+
+      <!-- Back Button -->
+      <button
+        type="button"
+        (click)="selectedMemo = null"
+        class="mb-6 flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
+      >
+        <span class="text-lg">
+          ←
+        </span>
+
+        Back to Testing Memos
+      </button>
+
+
+      <!-- Memo Main Information -->
+      <section
+        class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+      >
+
+        <div
+          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+
+          <div class="min-w-0">
+
+            <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+              Work Order
+            </p>
+
+            <h2 class="mt-1 truncate text-2xl font-bold text-slate-900">
+              {{ selectedMemo.groups?.[0]?.workOrder || 'No Work Order' }}
+            </h2>
+
+          </div>
+
+          <span
+            class="w-fit rounded-full bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700"
+          >
+            Pending Response
+          </span>
+
+        </div>
+
+
+        <!-- Original Person -->
+        <div
+          class="mt-6 rounded-xl bg-slate-50 p-4"
+        >
+
+          <p class="text-xs font-medium text-slate-400">
+            Original Person in Charge
+          </p>
+
+          <p class="mt-1 text-sm font-semibold text-slate-700">
+            {{ selectedMemo.personInCharge || '-' }}
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- ==================== GROUPS ==================== -->
+      <section class="mb-8">
+
+        <div class="mb-5">
+
+          <p class="text-sm font-medium text-blue-600">
+            Inspection Information
+          </p>
+
+          <h2 class="mt-1 text-xl font-bold text-slate-900">
+            Testing Details
+          </h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            All information submitted from Testing Memo.
+          </p>
+
+        </div>
+
+
+        @for (group of selectedMemo.groups; track $index) {
+
+          <div
+            class="mb-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+          >
+
+            <!-- Group Header -->
+            <div
+              class="mb-6 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between"
+            >
+
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+                >
+                  {{ $index + 1 }}
+                </div>
+
+                <h3 class="font-semibold text-slate-900">
+                  Drum Group #{{ $index + 1 }}
+                </h3>
+
+              </div>
+
+              <span
+                class="w-fit rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600"
+              >
+                {{ group.drumNo || '-' }}
+              </span>
+
+            </div>
+
+
+            <!-- Group Data -->
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+              <!-- Drum No -->
+              <div>
+                <p class="text-xs font-medium text-slate-400">
+                  Drum No
+                </p>
+
+                <p class="mt-1 text-sm font-medium text-slate-700">
+                  {{ group.drumNo || '-' }}
+                </p>
+              </div>
+
+
+              <!-- Work Order -->
+              <div>
+                <p class="text-xs font-medium text-slate-400">
+                  Work Order
+                </p>
+
+                <p class="mt-1 text-sm font-medium text-slate-700">
+                  {{ group.workOrder || '-' }}
+                </p>
+              </div>
+
+
+              <!-- Client -->
+              <div>
+                <p class="text-xs font-medium text-slate-400">
+                  Client Name
+                </p>
+
+                <p class="mt-1 text-sm font-medium text-slate-700">
+                  {{ group.clientName || '-' }}
+                </p>
+              </div>
+
+
+              <!-- Cable Construction -->
+              <div>
+                <p class="text-xs font-medium text-slate-400">
+                  Cable Construction
+                </p>
+
+                <p class="mt-1 text-sm font-medium text-slate-700">
+                  {{ group.cableConstruction || '-' }}
+                </p>
+              </div>
+
+
+              <!-- Length -->
+              <div>
+                <p class="text-xs font-medium text-slate-400">
+                  Length
+                </p>
+
+                <p class="mt-1 text-sm font-medium text-slate-700">
+                  {{ group.length || '-' }}
+                </p>
+              </div>
+
+
+              <!-- Problem Description -->
+              <div class="sm:col-span-2 lg:col-span-3">
+
+                <p class="text-xs font-medium text-slate-400">
+                  Problem Description
+                </p>
+
+                <p
+                  class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+                >
+                  {{ group.problemDescription || '-' }}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+
+      <!-- ==================== IMAGES ==================== -->
+      @if (selectedMemo.images?.length > 0) {
+
+        <section class="mb-8">
+
+          <div class="mb-5">
+
+            <p class="text-sm font-medium text-blue-600">
+              Evidence
+            </p>
+
+            <h2 class="mt-1 text-xl font-bold text-slate-900">
+              Defect Images
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-500">
+              Images attached to this testing memo.
+            </p>
+
+          </div>
+
+
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+
+            @for (image of selectedMemo.images; track image) {
+
+              <div
+                class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+              >
+
+                <img
+                  [src]="image"
+                  alt="Defect Image"
+                  class="aspect-square w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+
+              </div>
+
+            }
+
+          </div>
+
+        </section>
+
+      }
+
+
+      <!-- ==================== QUALITY RESPONSE ==================== -->
+      <section
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+      >
+
+        <div class="mb-6">
+
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.8"
+              stroke="currentColor"
+              class="h-5 w-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+
+          </div>
+
+          <h2 class="mt-4 text-xl font-bold text-slate-900">
+            Quality Response
+          </h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Enter the quality response for this testing memo.
+          </p>
+
+        </div>
+
+
+        <div class="grid gap-5">
+
+          <!-- Production Comments -->
+          <div>
+
+            <label
+              class="mb-2 block text-sm font-medium text-slate-700"
+            >
+              Production Comments
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="productionComments"
+              placeholder="Enter production comments"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+            />
+
+          </div>
+
+
+          <!-- Quality Decision -->
+          <div>
+
+            <label
+              class="mb-2 block text-sm font-medium text-slate-700"
+            >
+              Quality Decision
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="qualityDecision"
+              placeholder="Enter quality decision"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+            />
+
+          </div>
+
+
+          <!-- Person in Charge -->
+          <div>
+
+            <label
+              class="mb-2 block text-sm font-medium text-slate-700"
+            >
+              Person in Charge
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="responsePersonInCharge"
+              placeholder="Enter person in charge"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+            />
+
+          </div>
+
+
+          <!-- Submit -->
+          <div class="flex justify-end pt-2">
+
+            <button
+              type="button"
+              (click)="submitResponse()"
+              [disabled]="submitting || !isResponseValid()"
+              class="w-full rounded-xl bg-blue-600 px-8 py-3.5 font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+            >
+
+              @if (submitting) {
+                <span>Submitting...</span>
+              } @else {
+                <span>Submit Quality Response</span>
+              }
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    }
+
+  </div>
+
+
+  <!-- ==================== DELETE MODAL ==================== -->
+  @if (showDeleteModal) {
+
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 backdrop-blur-sm"
+    >
+
+      <div
+        class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl"
+      >
+
+        <!-- Icon -->
+        <div
+          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-600"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-7 w-7"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v4m0 4h.01M10.3 4.8 2.9 18a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7-3L13.7 4.8a2 2 0 0 0-3.4 0Z"
+            />
+          </svg>
+
+        </div>
+
+
+        <!-- Content -->
+        <div class="mt-5 text-center">
+
+          <h2 class="text-xl font-semibold text-slate-900">
+            Delete Memo?
+          </h2>
+
+          <p class="mt-2 text-sm leading-6 text-slate-500">
+            Are you sure you want to delete this memo?
+            This action cannot be undone.
+          </p>
+
+        </div>
+
+
+        <!-- Actions -->
+        <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+
+          <button
+            type="button"
+            (click)="closeDeleteModal()"
+            class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 font-medium text-slate-700 transition hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            (click)="confirmDelete()"
+            class="flex-1 rounded-xl bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-700"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

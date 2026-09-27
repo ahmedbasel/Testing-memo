@@ -1,0 +1,456 @@
+<div class="min-h-screen bg-slate-50 text-slate-900">
+
+  <!-- Success Toast -->
+  @if (successMessage) {
+    <div class="fixed right-4 top-4 z-50 sm:right-6 sm:top-6">
+      <div
+        class="flex max-w-sm items-center gap-4 rounded-2xl border border-emerald-200 bg-white px-5 py-4 shadow-xl shadow-slate-200/60"
+      >
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+        >
+          ✓
+        </div>
+
+        <div>
+          <p class="font-semibold text-slate-900">
+            Success
+          </p>
+
+          <p class="mt-1 text-sm text-slate-500">
+            {{ successMessage }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+
+  <!-- Page Header -->
+  <header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+
+      <div class="flex items-start gap-4">
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-6 w-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2Z"
+            />
+          </svg>
+        </div>
+
+        <div>
+          <p class="text-sm font-medium text-blue-600">
+            Testing Department
+          </p>
+
+          <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">
+            Testing Defected Drum Memo
+          </h1>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Create a testing memo and add one or multiple drum groups.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- Main -->
+  <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
+    <!-- Groups -->
+    <div class="space-y-5">
+
+      @for (group of groups; track $index) {
+
+        <section
+          class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+        >
+
+          <!-- Group Header -->
+          <div
+            class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+          >
+
+            <div class="flex items-center gap-3">
+
+              <div
+                class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+              >
+                {{ $index + 1 }}
+              </div>
+
+              <div>
+                <h2 class="font-semibold text-slate-900">
+                  Drum Group {{ $index + 1 }}
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                  Drum testing information
+                </p>
+              </div>
+
+            </div>
+
+            @if (groups.length > 1) {
+              <button
+                type="button"
+                (click)="deleteGroup($index)"
+                class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 sm:w-auto"
+              >
+                Delete Group
+              </button>
+            }
+
+          </div>
+
+
+          <!-- Fields -->
+          <div class="grid gap-5 p-5 sm:p-6 md:grid-cols-2">
+
+            <!-- Drum No -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Drum No
+              </label>
+
+              <input
+                type="text"
+                name="drumNo-{{ $index }}"
+                [(ngModel)]="group.drumNo"
+                placeholder="Enter drum number"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              />
+            </div>
+
+
+            <!-- Work Order -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Work Order
+              </label>
+
+              <input
+                type="text"
+                name="workOrder-{{ $index }}"
+                [(ngModel)]="group.workOrder"
+                placeholder="Enter work order"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              />
+            </div>
+
+
+            <!-- Client Name -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Client Name
+              </label>
+
+              <input
+                type="text"
+                name="clientName-{{ $index }}"
+                [(ngModel)]="group.clientName"
+                placeholder="Enter client name"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              />
+            </div>
+
+
+            <!-- Cable Construction -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Cable Construction
+              </label>
+
+              <input
+                type="text"
+                name="cableConstruction-{{ $index }}"
+                [(ngModel)]="group.cableConstruction"
+                placeholder="Enter cable construction"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              />
+            </div>
+
+
+            <!-- Length -->
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Length
+              </label>
+
+              <input
+                type="text"
+                name="length-{{ $index }}"
+                [(ngModel)]="group.length"
+                placeholder="Enter length"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              />
+            </div>
+
+
+            <!-- Problem Description -->
+            <div class="md:col-span-2">
+              <label class="mb-2 block text-sm font-medium text-slate-700">
+                Problem Description
+              </label>
+
+              <textarea
+                rows="4"
+                name="problemDescription-{{ $index }}"
+                [(ngModel)]="group.problemDescription"
+                placeholder="Describe the problem..."
+                class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+              ></textarea>
+            </div>
+
+          </div>
+
+        </section>
+
+      }
+
+    </div>
+
+
+    <!-- Add Group -->
+    <div class="mt-5">
+
+      <button
+        type="button"
+        (click)="addGroup()"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-blue-300 bg-blue-50 px-5 py-4 font-semibold text-blue-600 transition hover:border-blue-400 hover:bg-blue-100"
+      >
+        <span class="text-lg">+</span>
+        Add Another Group
+      </button>
+
+    </div>
+
+
+    <!-- Person in Charge -->
+    <section
+      class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+    >
+
+      <div class="mb-4">
+        <h2 class="font-semibold text-slate-900">
+          Person in Charge
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Enter the person responsible for this testing memo.
+        </p>
+      </div>
+
+      <input
+        type="text"
+        name="personInCharge"
+        [(ngModel)]="personInCharge"
+        placeholder="Enter person in charge"
+        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+      />
+
+    </section>
+
+
+    <!-- Images -->
+    <section
+      class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+    >
+
+      <div class="mb-5">
+        <h2 class="font-semibold text-slate-900">
+          Defect Images
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Add photos of the defective drum.
+        </p>
+      </div>
+
+
+      <!-- Buttons -->
+      <div class="grid gap-3 sm:grid-cols-2">
+
+        <!-- Choose Images -->
+        <label
+          class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m2.25 15.75 3.75-3.75 3 3 4.5-4.5 4.5 4.5m-15 3.75h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 20.25 4.5h-15A2.25 2.25 0 0 0 3 6.75v9.75a2.25 2.25 0 0 0 2.25 2.25ZM15.75 9h.008v.008h-.008V9Z"
+            />
+          </svg>
+
+          <span>Choose Images</span>
+
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            class="hidden"
+            (change)="onImagesSelected($event)"
+          />
+
+        </label>
+
+
+        <!-- Camera -->
+        <button
+          type="button"
+          (click)="openCamera()"
+          class="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-4 font-semibold text-white transition hover:bg-blue-700"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6.75 7.5h1.5l1.125-1.5h5.25l1.125 1.5h1.5A2.25 2.25 0 0 1 19.5 9.75v7.5a2.25 2.25 0 0 1-2.25 2.25h-10.5A2.25 2.25 0 0 1 4.5 17.25v-7.5A2.25 2.25 0 0 1 6.75 7.5Z"
+            />
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 13.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+
+          <span>Take Photo</span>
+
+        </button>
+
+      </div>
+
+
+      <!-- Camera -->
+      @if (cameraOpen) {
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950">
+
+          <video
+            #cameraVideo
+            autoplay
+            playsinline
+            muted
+            class="max-h-[500px] w-full object-contain"
+          ></video>
+
+          <div class="flex flex-col gap-3 border-t border-slate-800 bg-slate-900 p-4 sm:flex-row">
+
+            <button
+              type="button"
+              (click)="takePhoto()"
+              class="flex-1 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-500"
+            >
+              Take Photo
+            </button>
+
+            <button
+              type="button"
+              (click)="closeCamera()"
+              class="rounded-xl border border-slate-700 px-5 py-3 font-medium text-slate-300 transition hover:bg-slate-800"
+            >
+              Cancel
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Preview -->
+      @if (selectedImages.length > 0) {
+
+        <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+
+          @for (image of selectedImages; track $index) {
+
+            <div
+              class="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-100"
+            >
+
+              <img
+                [src]="image.previewUrl"
+                alt="Selected image"
+                class="aspect-square w-full object-cover"
+              />
+
+              <button
+                type="button"
+                (click)="removeImage($index)"
+                title="Remove image"
+                class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-red-500 opacity-100 shadow-md transition hover:bg-red-50 sm:opacity-0 sm:group-hover:opacity-100"
+              >
+                ✕
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <!-- Submit -->
+    <div class="mt-6 flex justify-end">
+
+      <button
+        type="button"
+        (click)="submitMemo()"
+        [disabled]="submitting || !isMemoValid()"
+        class="w-full rounded-xl bg-blue-600 px-8 py-3.5 font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+      >
+
+        @if (submitting) {
+          <span>Submitting...</span>
+        } @else {
+          <span>Submit Memo</span>
+        }
+
+      </button>
+
+    </div>
+
+  </main>
+
+</div>

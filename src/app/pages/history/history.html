@@ -1,0 +1,509 @@
+<div class="min-h-screen bg-slate-50 text-slate-900">
+
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
+    <!-- Header -->
+    <div class="mb-8">
+
+      <div class="flex items-start gap-4">
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-6 w-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6v6l4 2m5-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </div>
+
+        <div>
+
+          <p class="text-sm font-medium text-violet-600">
+            Records
+          </p>
+
+          <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            History
+          </h1>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Review completed testing memos and quality responses.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Loading -->
+    @if (loading) {
+
+      <div
+        class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm"
+      >
+
+        <div
+          class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-violet-600"
+        ></div>
+
+        <p class="mt-4 text-sm text-slate-500">
+          Loading history...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- Error -->
+    @if (!loading && errorMessage) {
+
+      <div
+        class="rounded-2xl border border-red-200 bg-red-50 p-5"
+      >
+
+        <div class="flex items-start gap-3">
+
+          <div
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600"
+          >
+            !
+          </div>
+
+          <div>
+
+            <p class="font-medium text-red-700">
+              Something went wrong
+            </p>
+
+            <p class="mt-1 text-sm text-red-600">
+              {{ errorMessage }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- Empty -->
+    @if (!loading && !errorMessage && memos.length === 0) {
+
+      <div
+        class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm"
+      >
+
+        <div
+          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.7"
+            stroke="currentColor"
+            class="h-7 w-7"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2Z"
+            />
+          </svg>
+        </div>
+
+        <h2 class="mt-5 text-lg font-semibold text-slate-900">
+          No History Yet
+        </h2>
+
+        <p class="mt-2 text-sm text-slate-500">
+          No quality responses have been completed yet.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- History List -->
+    @if (!loading && !errorMessage && memos.length > 0) {
+
+      <div class="space-y-5">
+
+        @for (memo of memos; track memo.id) {
+
+          <section
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+          >
+
+            <!-- Memo Header -->
+            <div
+              class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
+            >
+
+              <div class="min-w-0">
+
+                <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                  Work Order
+                </p>
+
+                <h2 class="mt-1 truncate text-xl font-bold text-slate-900">
+                  {{ memo.groups?.[0]?.workOrder || 'N/A' }}
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-500">
+                  {{ memo.groups?.length || 0 }}
+                  {{ (memo.groups?.length || 0) === 1 ? 'group' : 'groups' }}
+                </p>
+
+              </div>
+
+
+              <div class="flex items-center justify-between gap-3">
+
+                <span
+                  class="w-fit rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"
+                >
+                  Completed
+                </span>
+
+                <!-- Delete -->
+                <button
+                  type="button"
+                  (click)="openDeleteModal(memo.id); $event.stopPropagation()"
+                  title="Delete memo"
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                    class="h-4 w-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
+                    />
+                  </svg>
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <!-- Memo Groups -->
+            <div class="mt-6 space-y-4">
+
+              @for (group of memo.groups; track $index) {
+
+                <div
+                  class="rounded-xl border border-slate-200 bg-slate-50 p-5"
+                >
+
+                  <!-- Group Header -->
+                  <div
+                    class="mb-5 flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between"
+                  >
+
+                    <div class="flex items-center gap-3">
+
+                      <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+                      >
+                        {{ $index + 1 }}
+                      </div>
+
+                      <p class="font-semibold text-slate-800">
+                        Group {{ $index + 1 }}
+                      </p>
+
+                    </div>
+
+                    <span
+                      class="w-fit rounded-lg bg-white px-3 py-1 text-sm font-medium text-slate-600 ring-1 ring-slate-200"
+                    >
+                      {{ group.drumNo || 'N/A' }}
+                    </span>
+
+                  </div>
+
+
+                  <!-- Group Data -->
+                  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+                    <!-- Drum No -->
+                    <div>
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Drum No
+                      </p>
+
+                      <p class="mt-1 text-sm font-medium text-slate-700">
+                        {{ group.drumNo || 'N/A' }}
+                      </p>
+                    </div>
+
+
+                    <!-- Work Order -->
+                    <div>
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Work Order
+                      </p>
+
+                      <p class="mt-1 text-sm font-medium text-slate-700">
+                        {{ group.workOrder || 'N/A' }}
+                      </p>
+                    </div>
+
+
+                    <!-- Client -->
+                    <div>
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Client Name
+                      </p>
+
+                      <p class="mt-1 text-sm font-medium text-slate-700">
+                        {{ group.clientName || 'N/A' }}
+                      </p>
+                    </div>
+
+
+                    <!-- Cable -->
+                    <div>
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Cable Construction
+                      </p>
+
+                      <p class="mt-1 text-sm font-medium text-slate-700">
+                        {{ group.cableConstruction || 'N/A' }}
+                      </p>
+                    </div>
+
+
+                    <!-- Length -->
+                    <div>
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Length
+                      </p>
+
+                      <p class="mt-1 text-sm font-medium text-slate-700">
+                        {{ group.length || 'N/A' }}
+                      </p>
+                    </div>
+
+
+                    <!-- Problem -->
+                    <div class="sm:col-span-2 lg:col-span-1">
+
+                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                        Problem Description
+                      </p>
+
+                      <p class="mt-1 text-sm leading-6 text-slate-700">
+                        {{ group.problemDescription || 'N/A' }}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- Quality Response -->
+            <div
+              class="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/60 p-5"
+            >
+
+              <div
+                class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              >
+
+                <div class="flex items-center gap-3">
+
+                  <div
+                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600"
+                  >
+                    ✓
+                  </div>
+
+                  <div>
+
+                    <h3 class="font-semibold text-slate-900">
+                      Quality Response
+                    </h3>
+
+                    <p class="mt-0.5 text-xs text-slate-500">
+                      Completed response
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <span
+                  class="w-fit rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-200"
+                >
+                  Responded
+                </span>
+
+              </div>
+
+
+              <div class="space-y-5">
+
+                <!-- Production Comments -->
+                <div>
+
+                  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    Production Comments
+                  </p>
+
+                  <p class="mt-1 text-sm leading-6 text-slate-700">
+                    {{ memo.qualityResponse?.productionComments || 'N/A' }}
+                  </p>
+
+                </div>
+
+
+                <!-- Quality Decision -->
+                <div>
+
+                  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    Quality Decision
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-800">
+                    {{ memo.qualityResponse?.qualityDecision || 'N/A' }}
+                  </p>
+
+                </div>
+
+
+                <!-- Responded By -->
+                <div class="border-t border-emerald-200 pt-4">
+
+                  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    Responded By
+                  </p>
+
+                  <p class="mt-1 break-all text-sm font-semibold text-blue-600">
+                    {{ memo.qualityResponse?.respondedBy || 'N/A' }}
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+
+  <!-- Delete Modal -->
+  @if (showDeleteModal) {
+
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 backdrop-blur-sm"
+    >
+
+      <div
+        class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl"
+      >
+
+        <!-- Icon -->
+        <div
+          class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-600"
+        >
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.8"
+            stroke="currentColor"
+            class="h-7 w-7"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v4m0 4h.01M10.3 4.8 2.9 18a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7 3L13.7 4.8a2 2 0 0 0-3.4 0Z"
+            />
+          </svg>
+
+        </div>
+
+
+        <!-- Content -->
+        <div class="mt-5 text-center">
+
+          <h2 class="text-xl font-semibold text-slate-900">
+            Delete Memo?
+          </h2>
+
+          <p class="mt-2 text-sm leading-6 text-slate-500">
+            Are you sure you want to delete this memo?
+            This action cannot be undone.
+          </p>
+
+        </div>
+
+
+        <!-- Actions -->
+        <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+
+          <button
+            type="button"
+            (click)="closeDeleteModal()"
+            class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 font-medium text-slate-700 transition hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            (click)="confirmDelete()"
+            class="flex-1 rounded-xl bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-700"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

@@ -1,0 +1,169 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8">
+
+  <div class="w-full max-w-md">
+
+    <!-- Logo / Title -->
+    <div class="mb-8 text-center">
+
+      <div
+        class="mx-auto mb-5 flex h-24 w-40 items-center justify-center overflow-hidden"
+      >
+        <img
+          src="Elsewedy_Electric_Logo.svg.webp"
+          alt="Elsewedy Electric"
+          class="h-full w-full object-contain"
+        />
+      </div>
+
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+        Create Account
+      </h1>
+
+      <p class="mt-2 text-sm text-slate-500">
+        Create your  Testing Memo account
+      </p>
+
+    </div>
+
+    <!-- Sign Up Card -->
+    <div
+      class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+    >
+
+      <form
+        (ngSubmit)="signUp()"
+        class="space-y-5"
+      >
+
+        <!-- Name -->
+        <div>
+
+          <label
+            for="name"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Name
+          </label>
+
+          <input
+            id="name"
+            name="name"
+            type="text"
+            [(ngModel)]="name"
+            placeholder="Enter your name"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+        <!-- Email -->
+        <div>
+
+          <label
+            for="email"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Email
+          </label>
+
+          <input
+            id="email"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Enter your email"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+        <!-- Password -->
+        <div>
+
+          <label
+            for="password"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Password
+          </label>
+
+          <input
+            id="password"
+            name="password"
+            type="password"
+            [(ngModel)]="password"
+            placeholder="Create a password"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+
+          <label
+            for="confirmPassword"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Confirm Password
+          </label>
+
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            [(ngModel)]="confirmPassword"
+            placeholder="Confirm your password"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+        <!-- Error -->
+        @if (errorMessage) {
+
+          <div
+            class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
+          >
+            {{ errorMessage }}
+          </div>
+
+        }
+
+        <!-- Sign Up Button -->
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {{ loading ? 'Creating account...' : 'Create Account' }}
+        </button>
+
+      </form>
+
+      <!-- Login Link -->
+      <div class="mt-6 border-t border-slate-100 pt-6 text-center">
+
+        <p class="text-sm text-slate-500">
+          Already have an account?
+
+          <a
+            routerLink="/login"
+            class="font-semibold text-blue-600 transition hover:text-blue-700"
+          >
+            Sign in
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-6 text-center text-xs text-slate-400">
+      Quality Control System
+    </p>
+
+  </div>
+
+</div>
