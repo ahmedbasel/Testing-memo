@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 })
 export class Signup {
    name = '';
-  email = '';
-  password = '';
-  confirmPassword = '';
+   email = '';
+   password = '';
+   confirmPassword = '';
 
   loading = false;
   errorMessage = '';
@@ -38,7 +38,7 @@ constructor(
 
     this.loading = true;
 
-   this.authService.signUp(
+  this.authService.signUp(
   this.name,
   this.email,
   this.password

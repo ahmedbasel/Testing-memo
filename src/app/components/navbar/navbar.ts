@@ -33,7 +33,7 @@ import {
 })
 export class Navbar {
    userName = '';
-  userEmail = '';
+   userEmail = '';
 
   mobileMenuOpen = false;
 
