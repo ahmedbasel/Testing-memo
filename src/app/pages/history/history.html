@@ -293,7 +293,7 @@
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1-15 0Z"
+                d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
               />
             </svg>
           </div>
@@ -314,6 +314,7 @@
 
           @for (memo of filteredMemos; track memo.id) {
 
+            <!-- History Card -->
             <section
               class="group cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md sm:p-6"
               (click)="openMemo(memo)"
@@ -343,7 +344,7 @@
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2Z"
+                          d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2-2Z"
                         />
                       </svg>
 
@@ -409,6 +410,7 @@
                   class="flex items-center justify-between gap-3 sm:justify-end"
                 >
 
+                  <!-- Status -->
                   <span
                     class="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"
                   >
@@ -416,11 +418,35 @@
                   </span>
 
 
+                  <!-- Download PDF -->
+                <button
+  type="button"
+  title="Download PDF"
+  (click)="downloadMemoPdf(memo); $event.stopPropagation()"
+  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.8"
+    stroke="currentColor"
+    class="h-4 w-4"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
+    />
+  </svg>
+</button>
+
+
                   <!-- Delete -->
                   <button
                     type="button"
-                    (click)="openDeleteModal(memo.id); $event.stopPropagation()"
                     title="Delete memo"
+                    (click)="openDeleteModal(memo.id); $event.stopPropagation()"
                     class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
                   >
 
@@ -435,7 +461,7 @@
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
+                        d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a2 2 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
                       />
                     </svg>
 
@@ -469,6 +495,350 @@
               </div>
 
             </section>
+
+
+            <!-- ================================================= -->
+            <!-- HIDDEN PDF CONTENT -->
+            <!-- This does NOT affect selectedMemo or open details -->
+            <!-- ================================================= -->
+
+            <div
+              [id]="'memo-pdf-' + memo.id"
+              class="fixed left-[-99999px] top-0 w-[1000px] bg-white p-8 text-slate-900"
+            >
+
+              <!-- PDF Header -->
+              <div
+                class="rounded-2xl border border-slate-200 bg-white p-6"
+              >
+
+                <p
+                  class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                >
+                  Work Order
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold text-slate-900">
+                  {{ memo.workOrder || 'N/A' }}
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-500">
+
+                  {{ memo.drums?.length || 0 }}
+
+                  {{
+                    (memo.drums?.length || 0) === 1
+                      ? 'drum'
+                      : 'drums'
+                  }}
+
+                </p>
+
+              </div>
+
+
+              <!-- Memo Information -->
+              <div
+                class="mt-5 rounded-2xl border border-slate-200 bg-white p-6"
+              >
+
+                <div class="mb-5 border-b border-slate-200 pb-4">
+
+                  <h3 class="font-semibold text-slate-900">
+                    Memo Information
+                  </h3>
+
+                  <p class="mt-1 text-xs text-slate-500">
+                    General information about this testing memo.
+                  </p>
+
+                </div>
+
+
+                <div class="grid grid-cols-3 gap-5">
+
+                  <!-- Client -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Client Name
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-slate-700">
+                      {{ memo.clientName || 'N/A' }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Cable -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Cable Construction
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-slate-700">
+                      {{ memo.cableConstruction || 'N/A' }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Person -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Person in Charge
+                    </p>
+
+                    <p class="mt-1 text-sm font-medium text-slate-700">
+                      {{ memo.personInCharge || 'N/A' }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Problem -->
+                  <div class="col-span-3">
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Problem Description
+                    </p>
+
+                    <p class="mt-1 text-sm leading-6 text-slate-700">
+                      {{ memo.problemDescription || 'N/A' }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- Drums -->
+              <div class="mt-5">
+
+                <div
+                  class="mb-4 flex items-center justify-between"
+                >
+
+                  <div>
+
+                    <h3 class="text-lg font-semibold text-slate-900">
+                      Drums
+                    </h3>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                      Drum numbers and their recorded lengths.
+                    </p>
+
+                  </div>
+
+                  <span
+                    class="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700"
+                  >
+
+                    {{ memo.drums?.length || 0 }}
+
+                    {{
+                      (memo.drums?.length || 0) === 1
+                        ? 'Drum'
+                        : 'Drums'
+                    }}
+
+                  </span>
+
+                </div>
+
+
+                <div class="space-y-3">
+
+                  @for (drum of memo.drums; track $index) {
+
+                    <div
+                      class="rounded-2xl border border-slate-200 bg-white p-5"
+                    >
+
+                      <div
+                        class="flex items-center justify-between"
+                      >
+
+                        <div class="flex items-center gap-3">
+
+                          <div
+                            class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+                          >
+                            {{ $index + 1 }}
+                          </div>
+
+                          <div>
+
+                            <p
+                              class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                            >
+                              Drum No
+                            </p>
+
+                            <p
+                              class="mt-1 font-semibold text-slate-800"
+                            >
+                              {{ drum.drumNo || 'N/A' }}
+                            </p>
+
+                          </div>
+
+                        </div>
+
+
+                        <div
+                          class="rounded-xl bg-slate-50 px-4 py-3"
+                        >
+
+                          <p
+                            class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                          >
+                            Length
+                          </p>
+
+                          <p
+                            class="mt-1 text-sm font-semibold text-slate-700"
+                          >
+                            {{ drum.length || 'N/A' }}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  }
+
+                </div>
+
+              </div>
+
+
+              <!-- Quality Response -->
+              <div
+                class="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-6"
+              >
+
+                <div class="mb-5">
+
+                  <h3 class="font-semibold text-slate-900">
+                    Quality Response
+                  </h3>
+
+                  <p class="mt-1 text-xs text-slate-500">
+                    Completed response
+                  </p>
+
+                </div>
+
+
+                <div class="space-y-5">
+
+                  <!-- Production Comments -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Production Comments
+                    </p>
+
+                    <p
+                      class="mt-1 text-sm leading-6 text-slate-700"
+                    >
+                      {{
+                        memo.qualityResponse?.productionComments
+                          || 'N/A'
+                      }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Quality Decision -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Quality Decision
+                    </p>
+
+                    <p
+                      class="mt-1 text-sm font-medium text-slate-800"
+                    >
+                      {{
+                        memo.qualityResponse?.qualityDecision
+                          || 'N/A'
+                      }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Responded By -->
+                  <div>
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Responded By
+                    </p>
+
+                    <p
+                      class="mt-1 break-all text-sm font-semibold text-blue-600"
+                    >
+                      {{
+                        memo.qualityResponse?.respondedBy
+                          || 'N/A'
+                      }}
+                    </p>
+
+                  </div>
+
+
+                  <!-- Response Person -->
+                  <div
+                    class="border-t border-emerald-200 pt-4"
+                  >
+
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
+                      Response Person in Charge
+                    </p>
+
+                    <p
+                      class="mt-1 text-sm font-medium text-slate-700"
+                    >
+                      {{
+                        memo.qualityResponse?.personInCharge
+                          || 'N/A'
+                      }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 
           }
 
@@ -576,7 +946,7 @@
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
+                    d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a1 1 0 0 1-1 1H8a2 2 0 0 1-1-1V7h10ZM10 11v5m4-5v5"
                   />
                 </svg>
 
@@ -699,6 +1069,7 @@
             <span
               class="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700"
             >
+
               {{ selectedMemo.drums?.length || 0 }}
 
               {{
@@ -737,7 +1108,9 @@
 
                     <div>
 
-                      <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                      <p
+                        class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                      >
                         Drum No
                       </p>
 
@@ -754,7 +1127,9 @@
                     class="rounded-xl bg-slate-50 px-4 py-3"
                   >
 
-                    <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                    <p
+                      class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                    >
                       Length
                     </p>
 
@@ -861,7 +1236,9 @@
                 Responded By
               </p>
 
-              <p class="mt-1 break-all text-sm font-semibold text-blue-600">
+              <p
+                class="mt-1 break-all text-sm font-semibold text-blue-600"
+              >
                 {{
                   selectedMemo.qualityResponse?.respondedBy
                     || 'N/A'
@@ -871,7 +1248,9 @@
             </div>
 
 
-            <div class="border-t border-emerald-200 pt-4">
+            <div
+              class="border-t border-emerald-200 pt-4"
+            >
 
               <p
                 class="text-xs font-medium uppercase tracking-wide text-slate-400"
@@ -895,6 +1274,7 @@
       </div>
 
     }
+
 
   </div>
 
@@ -925,7 +1305,7 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M12 9v4m0 4h.01M10.3 4.8 2.9 18a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7 3L13.7 4.8a2 2 0 0 0-3.4 0Z"
+              d="M12 9v4m0 4h.01M10.3 4.8 2.9 18a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7 0L13.7 4.8a2 2 0 0 0-3.4 0Z"
             />
           </svg>
 

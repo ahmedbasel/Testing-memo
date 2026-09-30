@@ -5,9 +5,9 @@ import {
 
 import { FormsModule } from '@angular/forms';
 
+
 import { MemoService } from '../../services/memo';
-
-
+import { PdfService } from '../../services/pdf.service';
 @Component({
   selector: 'app-history',
   imports: [FormsModule],
@@ -49,7 +49,9 @@ export class History {
 
   constructor(
     private memoService: MemoService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private pdfService: PdfService,
+
   ) {}
 
 
@@ -116,7 +118,64 @@ export class History {
     }
 
   }
+async downloadMemoPdf(memo: any) {
 
+  console.log('📄 PDF BUTTON CLICKED');
+  console.log('📄 MEMO:', memo);
+
+  this.cdr.detectChanges();
+
+  setTimeout(async () => {
+
+    const element =
+      document.getElementById(
+        `memo-pdf-${memo.id}`
+      );
+
+    console.log(
+      '📄 PDF ELEMENT:',
+      element
+    );
+
+    if (!element) {
+
+      console.error(
+        '❌ PDF element not found:',
+        `memo-pdf-${memo.id}`
+      );
+
+      return;
+    }
+
+    const workOrder =
+      memo.workOrder || 'Testing-Memo';
+
+    try {
+
+      console.log(
+        '📄 STARTING PDF GENERATION...'
+      );
+
+      await this.pdfService.downloadElementAsPdf(
+        element,
+        `Testing-Memo-${workOrder}`
+      );
+
+      console.log(
+        '✅ PDF DOWNLOADED'
+      );
+
+    } catch (error) {
+
+      console.error(
+        '❌ PDF GENERATION ERROR:',
+        error
+      );
+
+    }
+
+  }, 300);
+}
 
   // =========================
   // FILTERED MEMOS
