@@ -57,7 +57,9 @@
             Quality Department
           </p>
 
-          <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1
+            class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
+          >
             Quality Response
           </h1>
 
@@ -184,19 +186,23 @@
 
                 <div class="min-w-0">
 
-                  <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+                  <p
+                    class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                  >
                     Work Order
                   </p>
 
                   <h2
                     class="mt-1 truncate text-xl font-bold text-slate-900"
                   >
-                    {{ memo.groups?.[0]?.workOrder || 'No Work Order' }}
+                    {{ memo.workOrder || 'No Work Order' }}
                   </h2>
 
                 </div>
 
-                <div class="flex items-center justify-between gap-3 sm:justify-end">
+                <div
+                  class="flex items-center justify-between gap-3 sm:justify-end"
+                >
 
                   <span
                     class="w-fit rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700"
@@ -237,14 +243,15 @@
                 class="mt-5 grid gap-4 border-t border-slate-100 pt-5 sm:grid-cols-2 lg:grid-cols-4"
               >
 
-                <!-- Drum -->
+                <!-- Drums -->
                 <div>
                   <p class="text-xs font-medium text-slate-400">
-                    Drum No
+                    Drums
                   </p>
 
                   <p class="mt-1 text-sm font-medium text-slate-700">
-                    {{ memo.groups?.[0]?.drumNo || '-' }}
+                    {{ memo.drums?.length || 0 }}
+                    {{ (memo.drums?.length || 0) === 1 ? 'Drum' : 'Drums' }}
                   </p>
                 </div>
 
@@ -255,8 +262,10 @@
                     Client
                   </p>
 
-                  <p class="mt-1 truncate text-sm font-medium text-slate-700">
-                    {{ memo.groups?.[0]?.clientName || '-' }}
+                  <p
+                    class="mt-1 truncate text-sm font-medium text-slate-700"
+                  >
+                    {{ memo.clientName || '-' }}
                   </p>
                 </div>
 
@@ -268,7 +277,7 @@
                   </p>
 
                   <p class="mt-1 text-sm font-medium text-slate-700">
-                    {{ memo.groups?.[0]?.cableConstruction || '-' }}
+                    {{ memo.cableConstruction || '-' }}
                   </p>
                 </div>
 
@@ -287,18 +296,22 @@
               </div>
 
 
-              <!-- Groups Count -->
-              <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+              <!-- Memo Footer -->
+              <div
+                class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4"
+              >
 
                 <div>
+
                   <p class="text-xs font-medium text-slate-400">
-                    Testing Groups
+                    Testing Drums
                   </p>
 
                   <p class="mt-1 text-sm font-semibold text-slate-700">
-                    {{ memo.groups?.length || 0 }}
-                    {{ (memo.groups?.length || 0) === 1 ? 'Group' : 'Groups' }}
+                    {{ memo.drums?.length || 0 }}
+                    {{ (memo.drums?.length || 0) === 1 ? 'Drum' : 'Drums' }}
                   </p>
+
                 </div>
 
                 <span
@@ -348,12 +361,16 @@
 
           <div class="min-w-0">
 
-            <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <p
+              class="text-xs font-medium uppercase tracking-wide text-slate-400"
+            >
               Work Order
             </p>
 
-            <h2 class="mt-1 truncate text-2xl font-bold text-slate-900">
-              {{ selectedMemo.groups?.[0]?.workOrder || 'No Work Order' }}
+            <h2
+              class="mt-1 truncate text-2xl font-bold text-slate-900"
+            >
+              {{ selectedMemo.workOrder || 'No Work Order' }}
             </h2>
 
           </div>
@@ -367,25 +384,68 @@
         </div>
 
 
-        <!-- Original Person -->
+        <!-- Shared Memo Information -->
         <div
-          class="mt-6 rounded-xl bg-slate-50 p-4"
+          class="mt-6 grid gap-4 border-t border-slate-100 pt-6 sm:grid-cols-2 lg:grid-cols-3"
         >
 
-          <p class="text-xs font-medium text-slate-400">
-            Original Person in Charge
-          </p>
+          <!-- Client -->
+          <div>
+            <p class="text-xs font-medium text-slate-400">
+              Client Name
+            </p>
 
-          <p class="mt-1 text-sm font-semibold text-slate-700">
-            {{ selectedMemo.personInCharge || '-' }}
-          </p>
+            <p class="mt-1 text-sm font-semibold text-slate-700">
+              {{ selectedMemo.clientName || '-' }}
+            </p>
+          </div>
+
+
+          <!-- Cable -->
+          <div>
+            <p class="text-xs font-medium text-slate-400">
+              Cable Construction
+            </p>
+
+            <p class="mt-1 text-sm font-semibold text-slate-700">
+              {{ selectedMemo.cableConstruction || '-' }}
+            </p>
+          </div>
+
+
+          <!-- Original Person -->
+          <div>
+            <p class="text-xs font-medium text-slate-400">
+              Original Person in Charge
+            </p>
+
+            <p class="mt-1 text-sm font-semibold text-slate-700">
+              {{ selectedMemo.personInCharge || '-' }}
+            </p>
+          </div>
+
+
+          <!-- Problem Description -->
+          <div class="sm:col-span-2 lg:col-span-3">
+
+            <p class="text-xs font-medium text-slate-400">
+              Problem Description
+            </p>
+
+            <p
+              class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+            >
+              {{ selectedMemo.problemDescription || '-' }}
+            </p>
+
+          </div>
 
         </div>
 
       </section>
 
 
-      <!-- ==================== GROUPS ==================== -->
+      <!-- ==================== DRUMS ==================== -->
       <section class="mb-8">
 
         <div class="mb-5">
@@ -395,133 +455,89 @@
           </p>
 
           <h2 class="mt-1 text-xl font-bold text-slate-900">
-            Testing Details
+            Testing Drums
           </h2>
 
           <p class="mt-1 text-sm text-slate-500">
-            All information submitted from Testing Memo.
+            Drum information submitted from the Testing Department.
           </p>
 
         </div>
 
 
-        @for (group of selectedMemo.groups; track $index) {
+        <div class="space-y-4">
 
-          <div
-            class="mb-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
-          >
+          @for (drum of selectedMemo.drums; track $index) {
 
-            <!-- Group Header -->
             <div
-              class="mb-6 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between"
+              class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
             >
 
-              <div class="flex items-center gap-3">
+              <!-- Drum Header -->
+              <div
+                class="mb-5 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between"
+              >
 
-                <div
-                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
-                >
-                  {{ $index + 1 }}
+                <div class="flex items-center gap-3">
+
+                  <div
+                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+                  >
+                    {{ $index + 1 }}
+                  </div>
+
+                  <h3 class="font-semibold text-slate-900">
+                    Drum #{{ $index + 1 }}
+                  </h3>
+
                 </div>
 
-                <h3 class="font-semibold text-slate-900">
-                  Drum Group #{{ $index + 1 }}
-                </h3>
-
-              </div>
-
-              <span
-                class="w-fit rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600"
-              >
-                {{ group.drumNo || '-' }}
-              </span>
-
-            </div>
-
-
-            <!-- Group Data -->
-            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
-              <!-- Drum No -->
-              <div>
-                <p class="text-xs font-medium text-slate-400">
-                  Drum No
-                </p>
-
-                <p class="mt-1 text-sm font-medium text-slate-700">
-                  {{ group.drumNo || '-' }}
-                </p>
-              </div>
-
-
-              <!-- Work Order -->
-              <div>
-                <p class="text-xs font-medium text-slate-400">
-                  Work Order
-                </p>
-
-                <p class="mt-1 text-sm font-medium text-slate-700">
-                  {{ group.workOrder || '-' }}
-                </p>
-              </div>
-
-
-              <!-- Client -->
-              <div>
-                <p class="text-xs font-medium text-slate-400">
-                  Client Name
-                </p>
-
-                <p class="mt-1 text-sm font-medium text-slate-700">
-                  {{ group.clientName || '-' }}
-                </p>
-              </div>
-
-
-              <!-- Cable Construction -->
-              <div>
-                <p class="text-xs font-medium text-slate-400">
-                  Cable Construction
-                </p>
-
-                <p class="mt-1 text-sm font-medium text-slate-700">
-                  {{ group.cableConstruction || '-' }}
-                </p>
-              </div>
-
-
-              <!-- Length -->
-              <div>
-                <p class="text-xs font-medium text-slate-400">
-                  Length
-                </p>
-
-                <p class="mt-1 text-sm font-medium text-slate-700">
-                  {{ group.length || '-' }}
-                </p>
-              </div>
-
-
-              <!-- Problem Description -->
-              <div class="sm:col-span-2 lg:col-span-3">
-
-                <p class="text-xs font-medium text-slate-400">
-                  Problem Description
-                </p>
-
-                <p
-                  class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+                <span
+                  class="w-fit rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600"
                 >
-                  {{ group.problemDescription || '-' }}
-                </p>
+                  {{ drum.drumNo || '-' }}
+                </span>
+
+              </div>
+
+
+              <!-- Drum Data -->
+              <div class="grid gap-5 sm:grid-cols-2">
+
+                <!-- Drum No -->
+                <div>
+
+                  <p class="text-xs font-medium text-slate-400">
+                    Drum No
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-700">
+                    {{ drum.drumNo || '-' }}
+                  </p>
+
+                </div>
+
+
+                <!-- Length -->
+                <div>
+
+                  <p class="text-xs font-medium text-slate-400">
+                    Length
+                  </p>
+
+                  <p class="mt-1 text-sm font-medium text-slate-700">
+                    {{ drum.length || '-' }}
+                  </p>
+
+                </div>
 
               </div>
 
             </div>
 
-          </div>
+          }
 
-        }
+        </div>
 
       </section>
 
@@ -548,7 +564,9 @@
           </div>
 
 
-          <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div
+            class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+          >
 
             @for (image of selectedMemo.images; track image) {
 
@@ -580,7 +598,9 @@
 
         <div class="mb-6">
 
-          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+          >
 
             <svg
               xmlns="http://www.w3.org/2000/svg"

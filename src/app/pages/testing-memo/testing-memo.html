@@ -61,7 +61,7 @@
           </h1>
 
           <p class="mt-1 text-sm text-slate-500">
-            Create a testing memo and add one or multiple drum groups.
+            Create a testing memo and record one or multiple drums.
           </p>
         </div>
 
@@ -74,173 +74,262 @@
   <!-- Main -->
   <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
 
-    <!-- Groups -->
-    <div class="space-y-5">
 
-      @for (group of groups; track $index) {
+    <!-- Shared Memo Information -->
+    <section
+      class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
 
-        <section
-          class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-        >
+      <!-- Section Header -->
+      <div
+        class="border-b border-slate-100 px-5 py-5 sm:px-6"
+      >
 
-          <!-- Group Header -->
+        <div class="flex items-center gap-3">
+
           <div
-            class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+            class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+          >
+            1
+          </div>
+
+          <div>
+            <h2 class="font-semibold text-slate-900">
+              Memo Information
+            </h2>
+
+            <p class="mt-1 text-xs text-slate-500">
+              General information for this testing memo
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Fields -->
+      <div class="grid gap-5 p-5 sm:p-6 md:grid-cols-2">
+
+        <!-- Work Order -->
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Work Order
+          </label>
+
+          <input
+            type="text"
+            name="workOrder"
+            [(ngModel)]="workOrder"
+            placeholder="Enter work order"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+        </div>
+
+
+        <!-- Client Name -->
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Client Name
+          </label>
+
+          <input
+            type="text"
+            name="clientName"
+            [(ngModel)]="clientName"
+            placeholder="Enter client name"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+        </div>
+
+
+        <!-- Cable Construction -->
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Cable Construction
+          </label>
+
+          <input
+            type="text"
+            name="cableConstruction"
+            [(ngModel)]="cableConstruction"
+            placeholder="Enter cable construction"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+        </div>
+
+
+        <!-- Problem Description -->
+        <div class="md:col-span-2">
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Problem Description
+          </label>
+
+          <textarea
+            rows="4"
+            name="problemDescription"
+            [(ngModel)]="problemDescription"
+            placeholder="Describe the problem..."
+            class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          ></textarea>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Drums -->
+    <section class="mt-6">
+
+      <!-- Drums Header -->
+      <div
+        class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+      >
+
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">
+            Drums
+          </h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Add the drum number and its corresponding length.
+          </p>
+        </div>
+
+        <div
+          class="inline-flex w-fit items-center rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-600"
+        >
+          {{ drums.length }}
+          {{ drums.length === 1 ? 'Drum' : 'Drums' }}
+        </div>
+
+      </div>
+
+
+      <!-- Drum Cards -->
+      <div class="space-y-4">
+
+        @for (drum of drums; track $index) {
+
+          <section
+            class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
           >
 
-            <div class="flex items-center gap-3">
+            <!-- Drum Header -->
+            <div
+              class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+            >
 
-              <div
-                class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
-              >
-                {{ $index + 1 }}
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
+                >
+                  {{ $index + 1 }}
+                </div>
+
+                <div>
+                  <h3 class="font-semibold text-slate-900">
+                    Drum {{ $index + 1 }}
+                  </h3>
+
+                  <p class="mt-1 text-xs text-slate-500">
+                    Drum identification and length
+                  </p>
+                </div>
+
               </div>
 
+
+              <!-- Delete Drum -->
+              @if (drums.length > 1) {
+
+                <button
+                  type="button"
+                  (click)="deleteDrum($index)"
+                  class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 sm:w-auto"
+                >
+                  Delete Drum
+                </button>
+
+              }
+
+            </div>
+
+
+            <!-- Drum Fields -->
+            <div
+              class="grid gap-5 p-5 sm:p-6 md:grid-cols-2"
+            >
+
+              <!-- Drum No -->
               <div>
-                <h2 class="font-semibold text-slate-900">
-                  Drum Group {{ $index + 1 }}
-                </h2>
+                <label
+                  class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                  Drum No
+                </label>
 
-                <p class="mt-1 text-xs text-slate-500">
-                  Drum testing information
-                </p>
+                <input
+                  type="text"
+                  name="drumNo-{{ $index }}"
+                  [(ngModel)]="drum.drumNo"
+                  placeholder="Enter drum number"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                />
+              </div>
+
+
+              <!-- Length -->
+              <div>
+                <label
+                  class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                  Length
+                </label>
+
+                <input
+                  type="text"
+                  name="length-{{ $index }}"
+                  [(ngModel)]="drum.length"
+                  placeholder="Enter length"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                />
               </div>
 
             </div>
 
-            @if (groups.length > 1) {
-              <button
-                type="button"
-                (click)="deleteGroup($index)"
-                class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 sm:w-auto"
-              >
-                Delete Group
-              </button>
-            }
+          </section>
 
-          </div>
+        }
+
+      </div>
 
 
-          <!-- Fields -->
-          <div class="grid gap-5 p-5 sm:p-6 md:grid-cols-2">
+      <!-- Add Drum -->
+      <div class="mt-4">
 
-            <!-- Drum No -->
-            <div>
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Drum No
-              </label>
+        <button
+          type="button"
+          (click)="addDrum()"
+          class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-blue-300 bg-blue-50 px-5 py-4 font-semibold text-blue-600 transition hover:border-blue-400 hover:bg-blue-100"
+        >
+          <span class="text-lg">+</span>
+          Add Another Drum
+        </button>
 
-              <input
-                type="text"
-                name="drumNo-{{ $index }}"
-                [(ngModel)]="group.drumNo"
-                placeholder="Enter drum number"
-                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
+      </div>
 
-
-            <!-- Work Order -->
-            <div>
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Work Order
-              </label>
-
-              <input
-                type="text"
-                name="workOrder-{{ $index }}"
-                [(ngModel)]="group.workOrder"
-                placeholder="Enter work order"
-                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
-
-
-            <!-- Client Name -->
-            <div>
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Client Name
-              </label>
-
-              <input
-                type="text"
-                name="clientName-{{ $index }}"
-                [(ngModel)]="group.clientName"
-                placeholder="Enter client name"
-                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
-
-
-            <!-- Cable Construction -->
-            <div>
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Cable Construction
-              </label>
-
-              <input
-                type="text"
-                name="cableConstruction-{{ $index }}"
-                [(ngModel)]="group.cableConstruction"
-                placeholder="Enter cable construction"
-                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
-
-
-            <!-- Length -->
-            <div>
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Length
-              </label>
-
-              <input
-                type="text"
-                name="length-{{ $index }}"
-                [(ngModel)]="group.length"
-                placeholder="Enter length"
-                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
-
-
-            <!-- Problem Description -->
-            <div class="md:col-span-2">
-              <label class="mb-2 block text-sm font-medium text-slate-700">
-                Problem Description
-              </label>
-
-              <textarea
-                rows="4"
-                name="problemDescription-{{ $index }}"
-                [(ngModel)]="group.problemDescription"
-                placeholder="Describe the problem..."
-                class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-              ></textarea>
-            </div>
-
-          </div>
-
-        </section>
-
-      }
-
-    </div>
-
-
-    <!-- Add Group -->
-    <div class="mt-5">
-
-      <button
-        type="button"
-        (click)="addGroup()"
-        class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-blue-300 bg-blue-50 px-5 py-4 font-semibold text-blue-600 transition hover:border-blue-400 hover:bg-blue-100"
-      >
-        <span class="text-lg">+</span>
-        Add Another Group
-      </button>
-
-    </div>
+    </section>
 
 
     <!-- Person in Charge -->
@@ -304,7 +393,7 @@
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="m2.25 15.75 3.75-3.75 3 3 4.5-4.5 4.5 4.5m-15 3.75h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 20.25 4.5h-15A2.25 2.25 0 0 0 3 6.75v9.75a2.25 2.25 0 0 0 2.25 2.25ZM15.75 9h.008v.008h-.008V9Z"
+              d="m2.25 15.75 3.75-3.75 3 3 4.5-4.5 4.5 4.5m-15 3.75h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 20.25 4.5h-15A2.25 2.25 0 0 0 3 6.75v9.75A2.25 2.25 0 0 0 5.25 18.75ZM15.75 9h.008v.008h-.008V9Z"
             />
           </svg>
 
@@ -359,7 +448,9 @@
       <!-- Camera -->
       @if (cameraOpen) {
 
-        <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950">
+        <div
+          class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-950"
+        >
 
           <video
             #cameraVideo
@@ -369,7 +460,9 @@
             class="max-h-[500px] w-full object-contain"
           ></video>
 
-          <div class="flex flex-col gap-3 border-t border-slate-800 bg-slate-900 p-4 sm:flex-row">
+          <div
+            class="flex flex-col gap-3 border-t border-slate-800 bg-slate-900 p-4 sm:flex-row"
+          >
 
             <button
               type="button"
@@ -397,7 +490,9 @@
       <!-- Preview -->
       @if (selectedImages.length > 0) {
 
-        <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        <div
+          class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
+        >
 
           @for (image of selectedImages; track $index) {
 
@@ -442,9 +537,13 @@
       >
 
         @if (submitting) {
+
           <span>Submitting...</span>
+
         } @else {
+
           <span>Submit Memo</span>
+
         }
 
       </button>

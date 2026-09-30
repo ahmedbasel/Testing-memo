@@ -1,23 +1,27 @@
 import { CloudinaryService } from './../../services/cloudinary';
-import { Component, ElementRef, ViewChild,ChangeDetectorRef  } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MemoService } from '../../services/memo';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 import { EmailService } from '../../services/email.service';
 import { getAuth } from 'firebase/auth';
-interface MemoGroup {
+
+interface Drum {
   drumNo: string;
-  workOrder: string;
-  clientName: string;
-  cableConstruction: string;
   length: string;
-  problemDescription: string;
 }
+
 interface SelectedImage {
   file: File;
   previewUrl: string;
 }
+
 @Component({
   selector: 'app-testing-memo',
   imports: [FormsModule],
@@ -25,68 +29,87 @@ interface SelectedImage {
   styleUrl: './testing-memo.sass',
 })
 export class TestingMemo {
+
   @ViewChild('cameraVideo')
   cameraVideo!: ElementRef<HTMLVideoElement>;
 
+  // Shared memo information
+  workOrder = '';
+  clientName = '';
+  cableConstruction = '';
+  problemDescription = '';
+
+  // Person in charge
   personInCharge = '';
 
-  groups: MemoGroup[] = [
-    this.createEmptyGroup()
+  // Drums
+  drums: Drum[] = [
+    this.createEmptyDrum(),
   ];
 
+  // Images
   selectedImages: SelectedImage[] = [];
 
+  // Camera
   cameraStream: MediaStream | null = null;
-
   cameraOpen = false;
-submitting = false;
-successMessage = '';
 
-constructor(
-  private cloudinaryService: CloudinaryService,
-  private memoService: MemoService,
-  private notificationService: NotificationService,
-  private router: Router,
-  private cdr: ChangeDetectorRef,
-  private emailService: EmailService
-) {}
+  // Submit state
+  submitting = false;
+  successMessage = '';
 
-  createEmptyGroup(): MemoGroup {
+  constructor(
+    private cloudinaryService: CloudinaryService,
+    private memoService: MemoService,
+    private notificationService: NotificationService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private emailService: EmailService
+  ) {}
+
+  // =========================
+  // DRUMS
+  // =========================
+
+  createEmptyDrum(): Drum {
     return {
       drumNo: '',
-      workOrder: '',
-      clientName: '',
-      cableConstruction: '',
       length: '',
-      problemDescription: '',
     };
   }
 
-
-  addGroup() {
-    this.groups.push(this.createEmptyGroup());
+  addDrum() {
+    this.drums.push(
+      this.createEmptyDrum()
+    );
   }
 
+  deleteDrum(index: number) {
 
-  deleteGroup(index: number) {
-
-    if (this.groups.length === 1) {
+    // Always keep at least one drum
+    if (this.drums.length === 1) {
       return;
     }
 
-    this.groups.splice(index, 1);
+    this.drums.splice(index, 1);
   }
 
 
+  // =========================
+  // IMAGES
+  // =========================
+
   onImagesSelected(event: Event) {
 
-    const input = event.target as HTMLInputElement;
+    const input =
+      event.target as HTMLInputElement;
 
     if (!input.files) {
       return;
     }
 
-    const files = Array.from(input.files);
+    const files =
+      Array.from(input.files);
 
     for (const file of files) {
 
@@ -94,121 +117,179 @@ constructor(
         continue;
       }
 
-      const previewUrl = URL.createObjectURL(file);
+      const previewUrl =
+        URL.createObjectURL(file);
 
       this.selectedImages.push({
         file,
         previewUrl,
       });
-
     }
 
     input.value = '';
   }
 
-async submitMemo() {
 
-  if (this.submitting) {
-    return;
-  }
-
-  this.submitting = true;
-  this.successMessage = '';
-
-  this.cdr.detectChanges();
-
-  try {
-
-    const imageUrls: string[] = [];
-
-    for (const image of this.selectedImages) {
-
-      const imageUrl =
-        await this.cloudinaryService.uploadImage(image.file);
-
-      imageUrls.push(imageUrl);
-
-    }
-
-
-    const memoData = {
-
-      groups: this.groups,
-
-      personInCharge: this.personInCharge,
-
-      images: imageUrls,
-
-    };
-// await this.memoService.createMemo(memoData);
-
-const memoRef = await this.memoService.createMemo(
-  memoData
-);
-const currentUser = getAuth().currentUser;
-
-if (!currentUser) {
-  throw new Error('User is not authenticated');
-}
-
-await this.notificationService.createNotificationForAllUsers(
-  'New Testing Memo',
-  'You have a new testing memo waiting for your reply',
-  'testing-memo',
-  memoRef.id,
-  currentUser.uid
-);
-
-    this.successMessage =
-      'Memo submitted successfully!';
-
-    this.cdr.detectChanges();
-
-
-    setTimeout(() => {
-
-      this.router.navigate(['/dashboard']);
-
-    }, 1500);
-
-
-  } catch (error) {
-
-    console.error(
-      'Error creating memo:',
-      error
-    );
-
-    this.submitting = false;
-
-    this.cdr.detectChanges();
-
-  }
-
-}
   removeImage(index: number) {
 
-    const image = this.selectedImages[index];
+    const image =
+      this.selectedImages[index];
 
-    URL.revokeObjectURL(image.previewUrl);
+    URL.revokeObjectURL(
+      image.previewUrl
+    );
 
-    this.selectedImages.splice(index, 1);
+    this.selectedImages.splice(
+      index,
+      1
+    );
   }
 
+
+  // =========================
+  // SUBMIT MEMO
+  // =========================
+
+  async submitMemo() {
+
+    if (this.submitting) {
+      return;
+    }
+
+    if (!this.isMemoValid()) {
+      return;
+    }
+
+    this.submitting = true;
+    this.successMessage = '';
+
+    this.cdr.detectChanges();
+
+    try {
+
+      // Upload images
+      const imageUrls: string[] = [];
+
+      for (const image of this.selectedImages) {
+
+        const imageUrl =
+          await this.cloudinaryService.uploadImage(
+            image.file
+          );
+
+        imageUrls.push(imageUrl);
+      }
+
+
+      // Memo data
+      const memoData = {
+
+        workOrder:
+          this.workOrder.trim(),
+
+        clientName:
+          this.clientName.trim(),
+
+        cableConstruction:
+          this.cableConstruction.trim(),
+
+        problemDescription:
+          this.problemDescription.trim(),
+
+        drums: this.drums.map(
+          (drum) => ({
+            drumNo:
+              drum.drumNo.trim(),
+
+            length:
+              drum.length.trim(),
+          })
+        ),
+
+        personInCharge:
+          this.personInCharge.trim(),
+
+        images:
+          imageUrls,
+      };
+
+
+      // Save memo
+      const memoRef =
+        await this.memoService.createMemo(
+          memoData
+        );
+
+
+      // Current user
+      const currentUser =
+        getAuth().currentUser;
+
+      if (!currentUser) {
+        throw new Error(
+          'User is not authenticated'
+        );
+      }
+
+
+      // Notify all other users
+      await this.notificationService
+        .createNotificationForAllUsers(
+          'New Testing Memo',
+          'You have a new testing memo waiting for your reply',
+          'testing-memo',
+          memoRef.id,
+          currentUser.uid
+        );
+
+
+      this.successMessage =
+        'Memo submitted successfully!';
+
+      this.cdr.detectChanges();
+
+
+      setTimeout(() => {
+
+        this.router.navigate([
+          '/dashboard'
+        ]);
+
+      }, 1500);
+
+
+    } catch (error) {
+
+      console.error(
+        'Error creating memo:',
+        error
+      );
+
+      this.submitting = false;
+
+      this.cdr.detectChanges();
+    }
+  }
+
+
+  // =========================
+  // CAMERA
+  // =========================
 
   async openCamera() {
 
     try {
 
       this.cameraStream =
-        await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: {
-              ideal: 'environment',
+        await navigator.mediaDevices
+          .getUserMedia({
+            video: {
+              facingMode: {
+                ideal: 'environment',
+              },
             },
-          },
-          audio: false,
-        });
+            audio: false,
+          });
 
       this.cameraOpen = true;
 
@@ -216,40 +297,51 @@ await this.notificationService.createNotificationForAllUsers(
 
         if (this.cameraVideo) {
 
-          this.cameraVideo.nativeElement.srcObject =
+          this.cameraVideo
+            .nativeElement
+            .srcObject =
             this.cameraStream;
-
         }
 
       });
 
     } catch (error) {
 
-      console.error('Camera error:', error);
+      console.error(
+        'Camera error:',
+        error
+      );
 
       alert(
         'Unable to access the camera. Please allow camera permission.'
       );
-
     }
-
   }
 
 
   takePhoto() {
 
-    if (!this.cameraVideo || !this.cameraStream) {
+    if (
+      !this.cameraVideo ||
+      !this.cameraStream
+    ) {
       return;
     }
 
-    const video = this.cameraVideo.nativeElement;
+    const video =
+      this.cameraVideo.nativeElement;
 
-    const canvas = document.createElement('canvas');
+    const canvas =
+      document.createElement('canvas');
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width =
+      video.videoWidth;
 
-    const context = canvas.getContext('2d');
+    canvas.height =
+      video.videoHeight;
+
+    const context =
+      canvas.getContext('2d');
 
     if (!context) {
       return;
@@ -263,31 +355,36 @@ await this.notificationService.createNotificationForAllUsers(
       canvas.height
     );
 
-    canvas.toBlob((blob) => {
+    canvas.toBlob(
+      (blob) => {
 
-      if (!blob) {
-        return;
-      }
-
-      const file = new File(
-        [blob],
-        `drum-photo-${Date.now()}.jpg`,
-        {
-          type: 'image/jpeg',
+        if (!blob) {
+          return;
         }
-      );
 
-      const previewUrl = URL.createObjectURL(file);
+        const file =
+          new File(
+            [blob],
+            `drum-photo-${Date.now()}.jpg`,
+            {
+              type: 'image/jpeg',
+            }
+          );
 
-      this.selectedImages.push({
-        file,
-        previewUrl,
-      });
+        const previewUrl =
+          URL.createObjectURL(file);
 
-      this.closeCamera();
+        this.selectedImages.push({
+          file,
+          previewUrl,
+        });
 
-    }, 'image/jpeg', 0.9);
+        this.closeCamera();
 
+      },
+      'image/jpeg',
+      0.9
+    );
   }
 
 
@@ -297,33 +394,61 @@ await this.notificationService.createNotificationForAllUsers(
 
       this.cameraStream
         .getTracks()
-        .forEach((track) => track.stop());
+        .forEach(
+          (track) =>
+            track.stop()
+        );
 
       this.cameraStream = null;
-
     }
 
     this.cameraOpen = false;
-
-  }
-isMemoValid(): boolean {
-  if (!this.personInCharge.trim()) {
-    return false;
   }
 
-  for (const group of this.groups) {
+
+  // =========================
+  // VALIDATION
+  // =========================
+
+  isMemoValid(): boolean {
+
+    // Shared information
     if (
-      !group.drumNo.trim() ||
-      !group.workOrder.trim() ||
-      !group.clientName.trim() ||
-      !group.cableConstruction.trim() ||
-      !group.length.trim() ||
-      !group.problemDescription.trim()
+      !this.workOrder.trim() ||
+      !this.clientName.trim() ||
+      !this.cableConstruction.trim() ||
+      !this.problemDescription.trim()
     ) {
       return false;
     }
-  }
 
-  return true;
-}
+
+    // Person in charge
+    if (
+      !this.personInCharge.trim()
+    ) {
+      return false;
+    }
+
+
+    // At least one drum is required
+    if (this.drums.length === 0) {
+      return false;
+    }
+
+
+    // Every added drum must be complete
+    for (const drum of this.drums) {
+
+      if (
+        !drum.drumNo.trim() ||
+        !drum.length.trim()
+      ) {
+        return false;
+      }
+    }
+
+
+    return true;
+  }
 }
