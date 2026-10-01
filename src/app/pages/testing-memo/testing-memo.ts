@@ -15,6 +15,7 @@ import { getAuth } from 'firebase/auth';
 interface Drum {
   drumNo: string;
   length: string;
+  notes: string;
 }
 
 interface SelectedImage {
@@ -38,7 +39,6 @@ export class TestingMemo {
   clientName = '';
   cableConstruction = '';
   problemDescription = '';
-
   // Person in charge
   personInCharge = '';
 
@@ -75,6 +75,8 @@ export class TestingMemo {
     return {
       drumNo: '',
       length: '',
+      notes: '',
+
     };
   }
 
@@ -195,17 +197,19 @@ export class TestingMemo {
 
         problemDescription:
           this.problemDescription.trim(),
-
+         
         drums: this.drums.map(
-          (drum) => ({
-            drumNo:
-              drum.drumNo.trim(),
+  (drum) => ({
+    drumNo:
+      drum.drumNo.trim(),
 
-            length:
-              drum.length.trim(),
-          })
-        ),
+    length:
+      drum.length.trim(),
 
+    notes:
+      drum.notes.trim(),
+  })
+),
         personInCharge:
           this.personInCharge.trim(),
 

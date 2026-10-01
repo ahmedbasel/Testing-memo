@@ -344,7 +344,7 @@
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2-2Z"
+                          d="M9 12h6m-6 4h6M9 8h6m5 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l6 6v8a2 2 0 0 1-2 2Z"
                         />
                       </svg>
 
@@ -419,27 +419,27 @@
 
 
                   <!-- Download PDF -->
-                <button
-  type="button"
-  title="Download PDF"
-  (click)="downloadMemoPdf(memo); $event.stopPropagation()"
-  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="1.8"
-    stroke="currentColor"
-    class="h-4 w-4"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
-    />
-  </svg>
-</button>
+                  <button
+                    type="button"
+                    title="Download PDF"
+                    (click)="downloadMemoPdf(memo); $event.stopPropagation()"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.8"
+                      stroke="currentColor"
+                      class="h-4 w-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
+                      />
+                    </svg>
+                  </button>
 
 
                   <!-- Delete -->
@@ -499,7 +499,6 @@
 
             <!-- ================================================= -->
             <!-- HIDDEN PDF CONTENT -->
-            <!-- This does NOT affect selectedMemo or open details -->
             <!-- ================================================= -->
 
             <div
@@ -639,7 +638,7 @@
                     </h3>
 
                     <p class="mt-1 text-sm text-slate-500">
-                      Drum numbers and their recorded lengths.
+                      Drum numbers, lengths, and notes.
                     </p>
 
                   </div>
@@ -669,10 +668,12 @@
                       class="rounded-2xl border border-slate-200 bg-white p-5"
                     >
 
+                      <!-- Drum Info -->
                       <div
                         class="flex items-center justify-between"
                       >
 
+                        <!-- Drum Number -->
                         <div class="flex items-center gap-3">
 
                           <div
@@ -700,6 +701,7 @@
                         </div>
 
 
+                        <!-- Length -->
                         <div
                           class="rounded-xl bg-slate-50 px-4 py-3"
                         >
@@ -719,6 +721,30 @@
                         </div>
 
                       </div>
+
+
+                      <!-- Drum Notes -->
+                      @if (drum.notes) {
+
+                        <div
+                          class="mt-5 border-t border-slate-200 pt-4"
+                        >
+
+                          <p
+                            class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                          >
+                            Notes
+                          </p>
+
+                          <p
+                            class="mt-2 text-sm leading-6 text-slate-700"
+                          >
+                            {{ drum.notes }}
+                          </p>
+
+                        </div>
+
+                      }
 
                     </div>
 
@@ -983,6 +1009,7 @@
             class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
           >
 
+            <!-- Client -->
             <div>
 
               <p
@@ -998,6 +1025,7 @@
             </div>
 
 
+            <!-- Cable -->
             <div>
 
               <p
@@ -1013,6 +1041,7 @@
             </div>
 
 
+            <!-- Person -->
             <div>
 
               <p
@@ -1028,6 +1057,7 @@
             </div>
 
 
+            <!-- Problem -->
             <div class="sm:col-span-2 lg:col-span-3">
 
               <p
@@ -1061,7 +1091,7 @@
               </h3>
 
               <p class="mt-1 text-sm text-slate-500">
-                Drum numbers and their recorded lengths.
+                Drum numbers, lengths, and notes.
               </p>
 
             </div>
@@ -1094,10 +1124,12 @@
                 class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
               >
 
+                <!-- Drum Info -->
                 <div
                   class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
                 >
 
+                  <!-- Drum Number -->
                   <div class="flex items-center gap-3">
 
                     <div
@@ -1123,6 +1155,7 @@
                   </div>
 
 
+                  <!-- Length -->
                   <div
                     class="rounded-xl bg-slate-50 px-4 py-3"
                   >
@@ -1140,6 +1173,40 @@
                   </div>
 
                 </div>
+
+
+                <!-- Notes -->
+                @if (drum.notes) {
+
+                  <div
+                    class="mt-5 border-t border-slate-100 pt-5"
+                  >
+
+                    <div class="flex items-center justify-between">
+
+                      <p
+                        class="text-xs font-medium uppercase tracking-wide text-slate-400"
+                      >
+                        Notes
+                      </p>
+
+                      <span
+                        class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500"
+                      >
+                        Optional
+                      </span>
+
+                    </div>
+
+                    <p
+                      class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+                    >
+                      {{ drum.notes }}
+                    </p>
+
+                  </div>
+
+                }
 
               </div>
 
@@ -1192,6 +1259,7 @@
 
           <div class="space-y-5">
 
+            <!-- Production Comments -->
             <div>
 
               <p
@@ -1210,6 +1278,7 @@
             </div>
 
 
+            <!-- Quality Decision -->
             <div>
 
               <p
@@ -1228,6 +1297,7 @@
             </div>
 
 
+            <!-- Responded By -->
             <div>
 
               <p
@@ -1248,6 +1318,7 @@
             </div>
 
 
+            <!-- Response Person -->
             <div
               class="border-t border-emerald-200 pt-4"
             >

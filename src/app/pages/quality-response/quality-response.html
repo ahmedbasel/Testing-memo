@@ -439,6 +439,8 @@
             </p>
 
           </div>
+          <!-- Notes -->
+
 
         </div>
 
@@ -531,6 +533,36 @@
 
                 </div>
 
+
+
+<!-- Notes -->
+@if (drum.notes) {
+
+  <div class="sm:col-span-2">
+
+    <div class="flex items-center justify-between">
+
+      <p class="text-xs font-medium text-slate-400">
+        Notes
+      </p>
+
+      <span
+        class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500"
+      >
+        Optional
+      </span>
+
+    </div>
+
+    <p
+      class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+    >
+      {{ drum.notes }}
+    </p>
+
+  </div>
+
+}
               </div>
 
             </div>

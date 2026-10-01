@@ -164,23 +164,25 @@
           />
         </div>
 
+<!-- Problem Description -->
+<div class="md:col-span-2">
+  <label
+    class="mb-2 block text-sm font-medium text-slate-700"
+  >
+    Problem Description
+  </label>
 
-        <!-- Problem Description -->
-        <div class="md:col-span-2">
-          <label
-            class="mb-2 block text-sm font-medium text-slate-700"
-          >
-            Problem Description
-          </label>
+  <textarea
+    rows="4"
+    name="problemDescription"
+    [(ngModel)]="problemDescription"
+    placeholder="Describe the problem..."
+    class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+  ></textarea>
+</div>
 
-          <textarea
-            rows="4"
-            name="problemDescription"
-            [(ngModel)]="problemDescription"
-            placeholder="Describe the problem..."
-            class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-          ></textarea>
-        </div>
+
+
 
       </div>
 
@@ -216,104 +218,135 @@
 
 
       <!-- Drum Cards -->
-      <div class="space-y-4">
+     <div class="space-y-4">
 
-        @for (drum of drums; track $index) {
+  @for (drum of drums; track $index) {
 
-          <section
-            class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    <section
+      class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
+
+      <!-- Drum Header -->
+      <div
+        class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+      >
+
+        <div class="flex items-center gap-3">
+
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
           >
+            {{ $index + 1 }}
+          </div>
 
-            <!-- Drum Header -->
-            <div
-              class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6"
-            >
+          <div>
+            <h3 class="font-semibold text-slate-900">
+              Drum {{ $index + 1 }}
+            </h3>
 
-              <div class="flex items-center gap-3">
+            <p class="mt-1 text-xs text-slate-500">
+              Drum identification and length
+            </p>
+          </div>
 
-                <div
-                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-600"
-                >
-                  {{ $index + 1 }}
-                </div>
-
-                <div>
-                  <h3 class="font-semibold text-slate-900">
-                    Drum {{ $index + 1 }}
-                  </h3>
-
-                  <p class="mt-1 text-xs text-slate-500">
-                    Drum identification and length
-                  </p>
-                </div>
-
-              </div>
+        </div>
 
 
-              <!-- Delete Drum -->
-              @if (drums.length > 1) {
+        <!-- Delete Drum -->
+        @if (drums.length > 1) {
 
-                <button
-                  type="button"
-                  (click)="deleteDrum($index)"
-                  class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 sm:w-auto"
-                >
-                  Delete Drum
-                </button>
-
-              }
-
-            </div>
-
-
-            <!-- Drum Fields -->
-            <div
-              class="grid gap-5 p-5 sm:p-6 md:grid-cols-2"
-            >
-
-              <!-- Drum No -->
-              <div>
-                <label
-                  class="mb-2 block text-sm font-medium text-slate-700"
-                >
-                  Drum No
-                </label>
-
-                <input
-                  type="text"
-                  name="drumNo-{{ $index }}"
-                  [(ngModel)]="drum.drumNo"
-                  placeholder="Enter drum number"
-                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-                />
-              </div>
-
-
-              <!-- Length -->
-              <div>
-                <label
-                  class="mb-2 block text-sm font-medium text-slate-700"
-                >
-                  Length
-                </label>
-
-                <input
-                  type="text"
-                  name="length-{{ $index }}"
-                  [(ngModel)]="drum.length"
-                  placeholder="Enter length"
-                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-                />
-              </div>
-
-            </div>
-
-          </section>
+          <button
+            type="button"
+            (click)="deleteDrum($index)"
+            class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 sm:w-auto"
+          >
+            Delete Drum
+          </button>
 
         }
 
       </div>
 
+
+      <!-- Drum Fields -->
+      <div
+        class="grid gap-5 p-5 sm:p-6 md:grid-cols-2"
+      >
+
+        <!-- Drum No -->
+        <div>
+
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Drum No
+          </label>
+
+          <input
+            type="text"
+            name="drumNo-{{ $index }}"
+            [(ngModel)]="drum.drumNo"
+            placeholder="Enter drum number"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+
+        <!-- Length -->
+        <div>
+
+          <label
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            Length
+          </label>
+
+          <input
+            type="text"
+            name="length-{{ $index }}"
+            [(ngModel)]="drum.length"
+            placeholder="Enter length"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          />
+
+        </div>
+
+
+        <!-- Notes -->
+        <div class="md:col-span-2">
+
+          <div class="mb-2 flex items-center justify-between">
+
+            <label
+              class="block text-sm font-medium text-slate-700"
+            >
+              Notes
+            </label>
+
+            <span class="text-xs font-medium text-slate-400">
+              Optional
+            </span>
+
+          </div>
+
+          <textarea
+            rows="3"
+            name="drumNotes-{{ $index }}"
+            [(ngModel)]="drum.notes"
+            placeholder="Add notes for this drum..."
+            class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+</div>
 
       <!-- Add Drum -->
       <div class="mt-4">
